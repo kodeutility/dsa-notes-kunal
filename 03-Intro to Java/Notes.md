@@ -24,7 +24,7 @@
 - In JAVA we get bytecode, JVM converts this into machine code
 - JAVA is platform independent but JVM is platform dependent
 
-![](img-01.png)
+![Image 01](img-01.PNG)
 
 - JDK (Java Development Kit): JRE + Development tools
 - JRE (Java Runtime Environment): JVM + Library classes
@@ -53,7 +53,7 @@
     1. class loader loads all classes needed to execute the program
     2. JVM sends code to Byte code verifier to check the format of code
 
-![](img-02.png)
+![Image 02](img-02.PNG)
 
 # Class Loader (How JVM works)
 - **Loading** :

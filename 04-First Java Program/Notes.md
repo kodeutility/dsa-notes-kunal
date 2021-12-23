@@ -253,7 +253,7 @@ if(salary>10000){
 ```
 
 # Loops
-##Syntax
+## Syntax
 
 ```java
 // for loop
@@ -484,6 +484,7 @@ switch(fruit){
         System.out.println("not a fruit");
         break;
 }
+```
 
 ### Newer syntax
 - break need not be specified, it is there automatically
