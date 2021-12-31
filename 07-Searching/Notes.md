@@ -615,5 +615,319 @@ Constraints:
 0 <= arr[i] <= 106
 arr is guaranteed to be a mountain array.
 ```
-- 
+### Observation
+- Basically we are suppose to find the index of maximum number in given array
+- Brute force way is linear search till we find max element O(N)
+- Possibilities
+    - if arr[mid]>arr[mid+1] && arr[mid]>arr[mid-1] then we  have found maximum element, return mid
+    - if arr[mid] > arr[mid+1] then we are in decreasing part of array then our answer is mid or elements before mid, mid might be potential answer i.e. update search space end=mid
+    - if arr[mid] < arr[mid+1] then we are in increasing part of the array then our answer is mid+1 or elements after mid+1, mid+1 might be potential answer i.e. update search space start=mid+1
+```java
+class Solution {
+    public int peakIndexInMountainArray(int[] arr) {
+        int start = 0;
+        int end = arr.length -1;
+        int possible_answer=Integer.MIN_VALUE;
+        int possible_index = -1;
 
+        while(start<=end){
+            int mid= start + (end-start)/2;
+            if(arr[mid]>arr[mid+1] && arr[mid]>arr[mid-1]){
+                return mid;
+            }
+            else if(arr[mid]>arr[mid+1]){
+                if(arr[mid]>possible_answer){
+                    possible_answer=arr[mid];
+                    possible_index=mid;
+                }
+                end=mid;
+            }else if(arr[mid]<arr[mid+1]){
+                if(arr[mid+1]>possible_answer){
+                    possible_answer=arr[mid+1];
+                    possible_index=mid+1;
+                }
+                start=mid+1;
+            }
+        }
+
+        return possible_index;
+    }
+}
+```
+## OR
+- start and end are trying to find the maximum number
+- Both start and end are always trying to find the maximum number, hence at any given point of time start and end pointer have best answers
+- Since we have loop till start<end , when we have start==end loops starts and both start and end are pointing to maximum value
+```java
+class Solution {
+    public int peakIndexInMountainArray(int[] arr) {
+        int start = 0;
+        int end = arr.length -1;
+
+        while(start<end){
+            int mid= start + (end-start)/2;
+            if(arr[mid]>arr[mid+1]){
+                end=mid;
+            }else{
+                start=mid+1;
+            }
+        }
+        return start; // OR return end;
+    }
+}
+```
+
+# Find in Mountain Array
+- You may recall that an array arr is a mountain array if and only if:
+    - arr.length >= 3
+    - There exists some i with 0 < i < arr.length - 1 such that:
+        - arr[0] < arr[1] < ... < arr[i - 1] < arr[i]
+        - arr[i] > arr[i + 1] > ... > arr[arr.length - 1]
+- Given a mountain array mountainArr, return the minimum index such that mountainArr.get(index) == target. If such an index does not exist, return -1.
+- You cannot access the mountain array directly. You may only access the array using a MountainArray interface:
+    - **MountainArray.get(k)** returns the element of the array at index k (0-indexed).
+    - **MountainArray.length()** returns the length of the array.
+
+```
+Input: array = [1,2,3,4,5,3,1], target = 3
+Output: 2
+Explanation: 3 exists in the array, at index=2 and index=5. Return the minimum index, which is 2.
+
+Input: array = [0,1,2,4,2,1], target = 3
+Output: -1
+Explanation: 3 does not exist in the array, so we return -1.
+
+Constraints:
+3 <= mountain_arr.length() <= 104
+0 <= target <= 109
+0 <= mountain_arr.get(index) <= 109
+```
+- First we find the peak element
+- Then do orderAgnostic Binary Search on first half of Mountain array , if not found then do orderAgnostic Binary search on second half of array
+```java
+//Code
+```
+
+# Search in Rotated Sorted Array
+- There is an integer array nums sorted in ascending order (with distinct values).
+- Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). 
+- For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
+- Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+- You must write an algorithm with O(log n) runtime complexity.
+
+### Approach 1
+- Find pivot in the array, which is largest number in the array
+- Once pivot is found then we have 2 arrays which are both sorted
+- Apply binary search till (0 to pivot) , if not found then return binary search of (pivot+1 to end of array)
+- How to find pivot?
+    - In [3,4,5,6,7,0,1,2]
+    - We can see 3,4,5,6,7 is ascending and 0,1,2 is also ascending
+    - 7,0 is descending only two elements can be descending as this is a pivot
+    - if 7 is mid, then we know breaking condition will be if arr[mid] > arr[mid+1] then mid is the pivot
+
+### Cases for finding answer (Below cases can occur only for 1 pair of elements)
+- Case 1: if arr[mid] > arr[mid+1] then mid is the pivot
+- Case 2: if arr[mid] < arr[mid-1] then mid-1 is the pivot
+
+# Rotation count
+- Find the number of rotationsin given array
+- We can just find the pivot index and add 1 to it
+- E.g. [5,6,7,8,9,0,1,2,3,4] count: 4+1 = 5 rotations
+- E.g. [0,1,2,3,4,5,6,7,8,9] count: -1+1 = 0 rotations
+
+```java
+public class RotationCount {
+    public static void main(String[] args) {
+        int[] arr = {4,5,6,7,0,1,2};
+        System.out.println(countRotations(arr));
+    }
+
+    private static int countRotations(int[] arr) {
+        int pivot = findPivot(arr);
+        return pivot + 1;
+    }
+
+    // use this for non duplicates
+    static int findPivot(int[] arr) {
+        int start = 0;
+        int end = arr.length - 1;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            // 4 cases over here
+            if (mid < end && arr[mid] > arr[mid + 1]) {
+                return mid;
+            }
+            if (mid > start && arr[mid] < arr[mid - 1]) {
+                return mid-1;
+            }
+            if (arr[mid] <= arr[start]) {
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
+        }
+        return -1;
+    }
+
+    // use this when arr contains duplicates
+    static int findPivotWithDuplicates(int[] arr) {
+        int start = 0;
+        int end = arr.length - 1;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            // 4 cases over here
+            if (mid < end && arr[mid] > arr[mid + 1]) {
+                return mid;
+            }
+            if (mid > start && arr[mid] < arr[mid - 1]) {
+                return mid-1;
+            }
+
+            // if elements at middle, start, end are equal then just skip the duplicates
+            if (arr[mid] == arr[start] && arr[mid] == arr[end]) {
+                // skip the duplicates
+                // NOTE: what if these elements at start and end were the pivot??
+                // check if start is pivot
+                if (arr[start] > arr[start + 1]) {
+                    return start;
+                }
+                start++;
+
+                // check whether end is pivot
+                if (arr[end] < arr[end - 1]) {
+                    return end - 1;
+                }
+                end--;
+            }
+            // left side is sorted, so pivot should be in right
+            else if(arr[start] < arr[mid] || (arr[start] == arr[mid] && arr[mid] > arr[end])) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+# Split Array largest sum
+- Given an array nums which consists of non-negative integers and an integer m, you can split the array into m non-empty continuous subarrays.
+- Write an algorithm to minimize the largest sum among these m subarrays.
+
+```
+Input: nums = [7,2,5,10,8], m = 2
+Output: 18
+Explanation:
+There are four ways to split nums into two subarrays.
+The best way is to split it into [7,2,5] and [10,8],
+where the largest sum among the two subarrays is only 18.
+
+Input: nums = [1,2,3,4,5], m = 2
+Output: 9
+Example 3:
+
+Input: nums = [1,4,4], m = 3
+Output: 4
+
+Constraints:
+1 <= nums.length <= 1000
+0 <= nums[i] <= 106
+1 <= m <= min(50, nums.length)
+```
+### Brute Force
+- Try every sub array combination
+- For every subarray take max sum
+- Find minimum of all maximum sum of subarrays
+
+### Observations
+- We have to split into subarrays, in each way of spliting maximum sum is picked and out of all ways if more than 1 then minimum is picked
+- What is the minimum number of partitions can make on the sub array?
+    - Minimum partition is 1, so it is just whole array
+    - Here we take sum of all entire array since m=1 and that is the answer
+    - E.g. [7,2,5,10,8] -> 7+2+5+10+8=32
+- What is the maximum number of partitions can make on the sub array?
+    - Upto 50 , it will be the length of array, so just individual elements
+    - Theres is only one way, individual numbers is the sum of it's subarray so answer is the maximum element
+    - E.g. [7,2,5,10,8] -> 10
+- minimum answer = max value in array
+- maximum answer = sum of all values in array
+- So our answer can only be in the range [10 to 32]
+```
+When we have a range of answer and we have to find potential answer we can use Binary Search
+```
+- Here in this example , our answer lies in range from 10 to 32 and we know all numbers between 10 to 32 is sorted so we can try binary search
+- Trial 1:
+    - 10+32/2 = 21, now this is one potential answer
+    - 21 means largest individual sum we can have
+    - So let's divide our array in subarrays which sums upto 21 or less [7,2,5] and [8,10]
+    - And while creating each subarray we take count of pieces we made
+    - Check if have made pieces that is less than or equal to given **m**
+- If we are finishing out pieces, try to reduce 21 and check again by reducing search space
+- Basically(pieces made <= m) then search in left side of middle , so new search space is start & end=mid
+- Trial 2:
+    - Now start is 10 and end is 21
+    - mid 10+21/2 = 15
+    - So let's divide our array in subarrays which sums upto 15 or less [7,2,5], [8], [10] which made 3 pieces
+    - (pieces made > m) then search in right side of middle
+    - Update search space , start=mid+1,end
+    - now we have to search in values 16 to 21
+- Trial 3:
+    - Now start is 16 and end is 21
+    - New mid is 18
+    - So let's divide our array in subarrays which sums upto 18 or less [7,2,5], [8,10] which made 2 pieces
+    - Check if have made pieces that is less than or equal to given **m**
+    - (pieces made <= m) then search in left side of middle , so new search space is start & end=mid
+- Trial 4:
+    - Now start is 16 and end is 18
+    - Mid is 17
+    - So let's divide our array in subarrays which sums upto 17 or less [7,2,5], [8], [10] which made 3 pieces
+    - (pieces made > m) then search in right side of middle
+    - Update search space , start=mid+1,end
+    - now we have **start=mid=end** i.e. 18 which is final answer
+- Concept is
+    - If we have a certain sum, if we are making more pieces than given **m** we have to increase value of potential answer
+    - If we have a certain sum, if we are making less pieces or equal than given **m** we have to descrease value of potential answer 
+
+```java
+class SplitArray {
+    public int splitArray(int[] nums, int m) {
+        // Range of possible answers
+        int start = 0; // maximum element in array
+        int end = 0; // Sum of array
+
+        for (int i = 0; i < nums.length; i++) {
+            start = Math.max(start, nums[i]); // in the end of the loop this will contain the max item of the array
+            end += nums[i];
+        }
+
+        // binary search
+        while (start < end) {
+            // try for the middle as potential ans
+            int mid = start + (end - start) / 2;
+
+            // calculate how many pieces you can divide this in with this max sum
+            int sum = 0;
+            int pieces = 1;
+            for(int num : nums) {
+                if (sum + num > mid) {
+                    // you cannot add this in this subarray, make new one
+                    // say you add this num in new subarray, then sum = num
+                    sum = num;
+                    pieces++;
+                } else {
+                    sum += num;
+                }
+            }
+
+            if (pieces > m) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
+
+        }
+        return end; // here start == end
+    }
+}
+```
