@@ -1,10 +1,6 @@
 <head>
-  <link href="/fontawesome/css/all.css" rel="stylesheet"> <!--load all styles -->
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 </head>
-
-<i class="fas fa-user"></i> <!-- uses solid style -->
-<i class="far fa-user"></i> <!-- uses regular style -->
-<i class="fal fa-user"></i> <!-- uses light style -->
 
 # Searching <i class="fas fa-search"></i>
 - Finding a value
