@@ -1,4 +1,12 @@
-# Searching
+<head>
+  <link href="/fontawesome/css/all.css" rel="stylesheet"> <!--load all styles -->
+</head>
+
+<i class="fas fa-user"></i> <!-- uses solid style -->
+<i class="far fa-user"></i> <!-- uses regular style -->
+<i class="fal fa-user"></i> <!-- uses light style -->
+
+# Searching <i class="fas fa-search"></i>
 - Finding a value
 - Types of search
     1. Linear Search - Start search from 1st element till u find
@@ -931,3 +939,18 @@ class SplitArray {
     }
 }
 ```
+
+# Search in 2D array
+- Linear search is 2D array take O(m*n) time complexity
+```java
+for(int i=0;i<arr.length;i++){
+    for(int j=0;j<i.length;j++){
+        if(arr[i][j]==target){
+            return new int[]{i,j};
+        }
+    }
+}
+```
+# Matrix is sorted in row wise and column wise
+- Take any row and it will be sorted
+- Take any column and it will be sorted
